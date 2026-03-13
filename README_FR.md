@@ -70,6 +70,22 @@ Ajoutez un enregistrement A chez votre fournisseur DNS :
 
 **On n'est pas 007, on est des crevettes 724.**
 
+## 🗺️ Feuille de Route (Roadmap)
+
+La révolution des crevettes ne fait que commencer. Il y a de nombreuses phases à venir :
+
+- [x] 🦞 Plaintes anonymes & commentaires avec contrôle d'identité crevette
+- [x] 🔥 Classement populaire & pagination
+- [x] 🌍 Support multilingue (6 langues)
+- [x] 📊 Tableau de bord de stress cybernétique avec visualisations en temps réel
+- [ ] 🖼️ **Upload d'images** — Partagez des captures de messages Slack absurdes et de PRs ridicules
+- [ ] 🎬 **Upload de vidéos** — Filmez vos échecs de déploiement à 3h du matin et partagez la douleur
+- [ ] 🎙️ **Plaintes vocales** — Parfois taper ne suffit pas, les crevettes ont besoin de CRIER !
+- [ ] 👍 **Système de réactions** — Au-delà des likes : 🦞 pinces, 💀 crâne, 🤡 clown
+- [ ] 🏷️ **Tags & catégories** — Filtrer par sujet : #FaimDeTokens #RêvesGPU #CitationsDuBoss
+- [ ] 📱 **Application mobile** — Plaignez-vous partout, même aux toilettes pendant le standup
+- [ ] 🤖 **Générateur de plaintes par IA** — Trop fatigué pour écrire ? Laissez l'IA se plaindre pour vous
+
 ## ⚠️ Clause de non-responsabilité (Disclaimer)
 
 Le contenu de ce site web et de ce dépôt est purement fictif et conçu pour l'expression humoristique, uniquement destiné aux "crevettes travailleuses" pour se détendre et se divertir en dehors de leur travail sous haute pression 7x24.

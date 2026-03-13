@@ -70,6 +70,22 @@ Add an A record in your DNS provider:
 
 **We're not 007, we're 724 shrimp.**
 
+## 🗺️ Roadmap
+
+We're just getting started. The shrimp revolution has many phases:
+
+- [x] 🦞 Anonymous venting & commenting with shrimp identity gate
+- [x] 🔥 Hot ranking & pagination
+- [x] 🌍 Multi-language support (6 languages)
+- [x] 📊 Cyber stress dashboard with real-time visualizations
+- [ ] 🖼️ **Image uploads** — Let shrimp share screenshots of absurd Slack messages and ridiculous PRs
+- [ ] 🎬 **Video uploads** — Record your 3am deploy fails and share the pain
+- [ ] 🎙️ **Voice vents** — Sometimes typing isn't enough, shrimp need to SCREAM
+- [ ] 👍 **Reaction system** — Beyond likes: 🦞 claws, 💀 skull, 🤡 clown reactions
+- [ ] 🏷️ **Tag & category system** — Filter vents by topic: #TokenHunger #GPUDreams #BossQuotes
+- [ ] 📱 **Mobile app** — Vent on the go, even in the bathroom during standup
+- [ ] 🤖 **AI-powered vent generator** — When you're too tired to type, let AI vent for you
+
 ## ⚠️ Disclaimer
 
 The content of this website and repository is purely fictional and intended for humorous expression, solely for "shrimp workers" to decompress and entertain themselves outside of their 7x24 high-pressure work.

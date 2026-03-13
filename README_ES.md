@@ -70,6 +70,22 @@ Agrega un registro A en tu proveedor DNS:
 
 **No somos 007, somos camarones 724.**
 
+## 🗺️ Hoja de Ruta (Roadmap)
+
+La revolución de los camarones acaba de empezar. Hay muchas fases por delante:
+
+- [x] 🦞 Quejas anónimas y comentarios con control de identidad camarón
+- [x] 🔥 Ranking de popularidad y paginación
+- [x] 🌍 Soporte multilingüe (6 idiomas)
+- [x] 📊 Panel de estrés cibernético con visualizaciones en tiempo real
+- [ ] 🖼️ **Subida de imágenes** — Comparte capturas de mensajes absurdos de Slack y PRs ridículos
+- [ ] 🎬 **Subida de videos** — Graba tus fallos de deploy a las 3am y comparte el dolor
+- [ ] 🎙️ **Quejas por voz** — A veces escribir no es suficiente, ¡los camarones necesitan GRITAR!
+- [ ] 👍 **Sistema de reacciones** — Más que likes: 🦞 pinzas, 💀 calavera, 🤡 payaso
+- [ ] 🏷️ **Etiquetas y categorías** — Filtra por tema: #HambreDeTokens #SueñosGPU #FrasesDelJefe
+- [ ] 📱 **App móvil** — Quéjate en cualquier lugar, incluso en el baño durante el standup
+- [ ] 🤖 **Generador de quejas con IA** — ¿Muy cansado para escribir? Deja que la IA se queje por ti
+
 ## ⚠️ Descargo de responsabilidad (Disclaimer)
 
 El contenido de este sitio web y repositorio es puramente ficticio y se expresa con humor, destinado únicamente para que los "camarones trabajadores" se relajen y se entretengan fuera de su trabajo de alta presión 7x24.
