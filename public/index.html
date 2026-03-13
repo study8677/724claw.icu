@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>724claw.icu — 打工虾吐槽墙</title>
+  <meta name="description" content="7×24打工人的赛博树洞，打工虾们的吐槽圣地 | Cyber vent wall for 724 workers">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0a0a0f;
+      --bg-card: #14141f;
+      --bg-card-hover: #1a1a2e;
+      --neon-red: #ff2d55;
+      --neon-orange: #ff6b35;
+      --neon-pink: #ff477e;
+      --neon-purple: #b429f9;
+      --text-main: #e8e8e8;
+      --text-dim: #888;
+      --text-bright: #fff;
+      --border: #2a2a3a;
+      --radius: 12px;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* === 语言切换器 === */
+    .lang-switcher {
+      position: fixed; top: 16px; right: 16px; z-index: 100;
+      display: flex; gap: 4px;
+      background: rgba(20,20,31,0.9);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
+      backdrop-filter: blur(10px);
+    }
+    .lang-btn {
+      background: none; border: none; color: var(--text-dim);
+      padding: 5px 10px; font-size: 0.8rem; cursor: pointer;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .lang-btn:hover { color: var(--text-main); }
+    .lang-btn.active {
+      background: rgba(255,45,85,0.2); color: var(--neon-red);
+    }
+
+    /* === 背景粒子效果 === */
+    .bg-particles {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .bg-particles::before {
+      content: '';
+      position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(255,45,85,0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, rgba(180,41,249,0.06) 0%, transparent 50%);
+      animation: bgFloat 20s ease-in-out infinite;
+    }
+    @keyframes bgFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(30px, -30px) rotate(1deg); }
+      66% { transform: translate(-20px, 20px) rotate(-1deg); }
+    }
+
+    /* === Hero 区域 === */
+    .hero {
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 80px 20px 60px;
+    }
+    .hero-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--neon-red), var(--neon-orange), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      animation: titleGlow 3s ease-in-out infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes titleGlow {
+      0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(255,45,85,0.3)); }
+      50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(255,45,85,0.6)); }
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      color: var(--text-dim);
+      margin-bottom: 30px;
+    }
+    .hero-subtitle .emoji { font-size: 1.4em; }
+    .hero-timer {
+      display: inline-block;
+      background: rgba(255,45,85,0.1);
+      border: 1px solid rgba(255,45,85,0.3);
+      border-radius: 8px;
+      padding: 8px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      color: var(--neon-red);
+      margin-bottom: 30px;
+    }
+    .hero-timer span { color: var(--text-bright); }
+
+    /* === 打工虾门控 === */
+    .gate-section {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative; z-index: 1;
+    }
+    .gate-btn {
+      background: linear-gradient(135deg, var(--neon-red), var(--neon-orange));
+      border: none;
+      color: #fff;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(255,45,85,0.3);
+    }
+    .gate-btn:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 30px rgba(255,45,85,0.5);
+    }
+    .gate-modal {
+      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .gate-modal.active { display: flex; }
+    .gate-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      animation: modalIn 0.3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .gate-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--text-bright);
+    }
+    .gate-card .lobster-big { font-size: 4rem; margin-bottom: 20px; display: block; }
+    .gate-card p { color: var(--text-dim); margin-bottom: 24px; }
+    .gate-yes {
+      background: linear-gradient(135deg, var(--neon-red), var(--neon-orange));
+      border: none; color: #fff; padding: 12px 30px; font-size: 1rem;
+      border-radius: 50px; cursor: pointer; margin: 6px;
+      transition: all 0.3s ease;
+    }
+    .gate-yes:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(255,45,85,0.4); }
+    .gate-no {
+      background: transparent; border: 1px solid var(--border); color: var(--text-dim);
+      padding: 12px 30px; font-size: 1rem; border-radius: 50px; cursor: pointer; margin: 6px;
+      transition: all 0.3s ease;
+    }
+    .gate-no:hover { border-color: var(--text-dim); color: var(--text-main); }
+
+    /* === 统计条 === */
+    .stats-bar {
+      position: relative; z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--neon-red), var(--neon-orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--text-dim); margin-top: 4px; }
+
+    /* === 主容器 === */
+    .container {
+      position: relative; z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* === 吐槽发布区 === */
+    .post-form {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.4s ease;
+    }
+    .post-form.active { display: block; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .post-form h3 {
+      font-size: 1.1rem;
+      color: var(--text-bright);
+      margin-bottom: 16px;
+    }
+    .form-row { margin-bottom: 14px; }
+    .form-row label {
+      display: block; font-size: 0.85rem; color: var(--text-dim); margin-bottom: 6px;
+    }
+    .form-row input, .form-row textarea {
+      width: 100%;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.3s;
+      resize: vertical;
+    }
+    .form-row input:focus, .form-row textarea:focus {
+      outline: none;
+      border-color: var(--neon-red);
+      box-shadow: 0 0 0 3px rgba(255,45,85,0.1);
+    }
+    .form-row textarea { min-height: 100px; }
+    .mood-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mood-btn {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-main);
+    }
+    .mood-btn:hover { border-color: var(--neon-red); }
+    .mood-btn.active {
+      border-color: var(--neon-red);
+      background: rgba(255,45,85,0.15);
+    }
+    .submit-btn {
+      background: linear-gradient(135deg, var(--neon-red), var(--neon-orange));
+      border: none; color: #fff; padding: 12px 30px; font-size: 1rem;
+      border-radius: 8px; cursor: pointer; width: 100%;
+      transition: all 0.3s; font-weight: 600;
+    }
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(255,45,85,0.4);
+    }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* === 过滤器（热榜/最新） === */
+    .sort-filters {
+      display: flex; gap: 12px; margin-bottom: 20px;
+      border-bottom: 1px solid var(--border); padding-bottom: 12px;
+    }
+    .sort-btn {
+      background: none; border: none; color: var(--text-dim);
+      font-size: 1rem; cursor: pointer; font-weight: 600;
+      transition: color 0.3s; position: relative;
+    }
+    .sort-btn:hover { color: var(--text-main); }
+    .sort-btn.active { color: var(--neon-orange); }
+    .sort-btn.active::after {
+      content: ''; position: absolute; bottom: -14px; left: 0; width: 100%;
+      height: 2px; background: var(--neon-orange); border-radius: 2px;
+    }
+
+    /* === 吐槽卡片 === */
+    .posts-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: all 0.3s ease;
+      animation: cardIn 0.4s ease backwards;
+    }
+    .post-card:hover {
+      border-color: rgba(255,45,85,0.3);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+    .post-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+    }
+    .post-author { display: flex; align-items: center; gap: 8px; }
+    .post-avatar {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--neon-red), var(--neon-orange));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .post-name { font-weight: 600; color: var(--text-bright); font-size: 0.95rem; }
+    .post-time { font-size: 0.8rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+    .post-mood {
+      background: rgba(255,45,85,0.1);
+      border: 1px solid rgba(255,45,85,0.2);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 0.8rem;
+    }
+    .post-content {
+      font-size: 1rem; line-height: 1.7; color: var(--text-main); margin-bottom: 14px;
+      word-break: break-word;
+    }
+    .post-actions { display: flex; gap: 16px; align-items: center; }
+    .action-btn {
+      background: none; border: none; color: var(--text-dim);
+      cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;
+      transition: color 0.2s;
+    }
+    .action-btn:hover { color: var(--neon-red); }
+    .action-btn.liked { color: var(--neon-red); }
+
+    /* === 评论区 === */
+    .comments-section {
+      display: none; margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .comments-section.active { display: block; }
+    .comment-item {
+      display: flex; gap: 10px; padding: 8px 0; font-size: 0.9rem;
+    }
+    .comment-author { color: var(--neon-orange); font-weight: 600; white-space: nowrap; }
+    .comment-text { color: var(--text-main); word-break: break-word; }
+    .comment-time { color: var(--text-dim); font-size: 0.75rem; white-space: nowrap; margin-left: auto; }
+    .comment-input-row {
+      display: none; gap: 8px; margin-top: 10px;
+    }
+    .comment-input-row.active { display: flex; }
+    .comment-input-row input {
+      flex: 1; background: var(--bg-dark); border: 1px solid var(--border);
+      border-radius: 8px; padding: 8px 12px; color: var(--text-main);
+      font-size: 0.85rem; font-family: inherit;
+    }
+    .comment-input-row input:focus { outline: none; border-color: var(--neon-red); }
+    .comment-send {
+      background: linear-gradient(135deg, var(--neon-red), var(--neon-orange));
+      border: none; color: #fff; padding: 8px 16px;
+      border-radius: 8px; cursor: pointer; font-size: 0.85rem; white-space: nowrap;
+    }
+
+    /* === 分页/加载更多 === */
+    .load-more-btn {
+      display: none; width: 100%; background: var(--bg-card);
+      border: 1px solid var(--border); color: var(--text-bright);
+      padding: 12px; border-radius: 8px; cursor: pointer; font-size: 1rem;
+      transition: all 0.3s; text-align: center; margin-bottom: 20px;
+    }
+    .load-more-btn.active { display: block; }
+    .load-more-btn:hover { border-color: var(--neon-orange); background: var(--bg-card-hover); }
+
+    /* === 空状态 === */
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: var(--text-dim);
+    }
+    .empty-state .big-emoji { font-size: 4rem; margin-bottom: 16px; display: block; }
+
+    /* === 页脚 === */
+    .footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 40px 20px;
+      color: var(--text-dim); font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--neon-red); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer .slogan { font-size: 1rem; margin-bottom: 10px; color: var(--text-main); }
+
+    /* === Toast === */
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: var(--bg-card); border: 1px solid var(--neon-red);
+      color: var(--text-bright); padding: 12px 24px; border-radius: 8px;
+      font-size: 0.9rem; z-index: 2000;
+      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 50px 16px 40px; }
+      .stats-bar { gap: 16px; }
+      .stat-num { font-size: 1.4rem; }
+      .post-card { padding: 16px; }
+      .gate-card { padding: 28px 20px; }
+      .lang-switcher { top: 10px; right: 10px; }
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+  </style>
+</head>
+<body>
+  <div class="bg-particles"></div>
+
+  <!-- 语言切换器 -->
+  <div class="lang-switcher" id="langSwitcher">
+    <button class="lang-btn active" data-lang="zh">中文</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="lang-btn" data-lang="ja">日本語</button>
+    <button class="lang-btn" data-lang="ko">한국어</button>
+    <button class="lang-btn" data-lang="es">ES</button>
+    <button class="lang-btn" data-lang="fr">FR</button>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1 class="hero-title">724claw.icu</h1>
+    <p class="hero-subtitle">
+      <span class="emoji">🦞</span> <span data-i18n="subtitle"></span>
+    </p>
+    <div class="hero-timer">
+      <span data-i18n="timer_prefix"></span> <span id="timer">00:00:00</span>
+    </div>
+  </section>
+
+  <!-- 门控按钮 -->
+  <div class="gate-section">
+    <button class="gate-btn" id="gateBtn" onclick="openGate()">
+      <span data-i18n="gate_btn"></span>
+    </button>
+  </div>
+
+  <!-- 门控弹窗 -->
+  <div class="gate-modal" id="gateModal">
+    <div class="gate-card">
+      <span class="lobster-big">🦞</span>
+      <h2 data-i18n="gate_title"></h2>
+      <p data-i18n="gate_desc"></p>
+      <button class="gate-yes" onclick="confirmLobster(true)" data-i18n="gate_yes"></button>
+      <button class="gate-no" onclick="confirmLobster(false)" data-i18n="gate_no"></button>
+    </div>
+  </div>
+
+  <!-- 统计 -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num" id="statPosts">0</div>
+      <div class="stat-label" data-i18n="stat_posts"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="statLikes">0</div>
+      <div class="stat-label" data-i18n="stat_likes"></div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="statComments">0</div>
+      <div class="stat-label" data-i18n="stat_comments"></div>
+    </div>
+  </div>
+
+  <!-- 主内容 -->
+  <div class="container">
+    <div class="post-form" id="postForm">
+      <h3 data-i18n="form_title"></h3>
+      <div class="form-row">
+        <label data-i18n="form_nickname_label"></label>
+        <input type="text" id="inputNickname" data-i18n-placeholder="form_nickname_placeholder" maxlength="20">
+      </div>
+      <div class="form-row">
+        <label data-i18n="form_mood_label"></label>
+        <div class="mood-picker" id="moodPicker"></div>
+      </div>
+      <div class="form-row">
+        <label data-i18n="form_content_label"></label>
+        <textarea id="inputContent" data-i18n-placeholder="form_content_placeholder" maxlength="500"></textarea>
+      </div>
+      <button class="submit-btn" id="submitBtn" onclick="submitPost()" data-i18n="form_submit"></button>
+    </div>
+
+    <!-- 过滤器热榜/最新切换 -->
+    <div class="sort-filters">
+       <button class="sort-btn active" data-sort="newest" onclick="setSortMode('newest')" data-i18n="sort_newest"></button>
+       <button class="sort-btn" data-sort="hottest" onclick="setSortMode('hottest')" data-i18n="sort_hottest"></button>
+    </div>
+
+    <div class="posts-list" id="postsList"></div>
+    <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()" data-i18n="load_more"></button>
+  </div>
+
+  <footer class="footer">
+    <p class="slogan" data-i18n="footer_slogan"></p>
+    <p>
+      <a href="https://github.com/study8677/724claw.icu" target="_blank">GitHub</a>
+      · 724claw.icu
+    </p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ==================== i18n 多语言系统 ====================
+    const i18n = {
+      zh: {
+        subtitle: '打工虾吐槽墙 — 7×24 打工人的赛博树洞',
+        timer_prefix: '已连续工作',
+        gate_btn: '🦞 我要吐槽！',
+        gate_btn_post: '🦞 写吐槽',
+        gate_title: '你是不是打工虾？',
+        gate_desc: '只有被 7×24 压榨的打工虾才能在这里吐槽哦',
+        gate_yes: '我是打工虾！🦞',
+        gate_no: '我不是...',
+        stat_posts: '条吐槽',
+        stat_likes: '次共鸣',
+        stat_comments: '条评论',
+        sort_newest: '最新发表',
+        sort_hottest: '最热虾图',
+        load_more: '加载更多吐槽',
+        form_title: '🦞 发一条吐槽',
+        form_nickname_label: '你的昵称（不填就是匿名打工虾）',
+        form_nickname_placeholder: '匿名打工虾',
+        form_mood_label: '选个心情',
+        form_content_label: '吐槽内容',
+        form_content_placeholder: '在这里尽情吐槽吧，打工虾！',
+        form_submit: '发布吐槽 🦞',
+        form_submitting: '发布中...',
+        footer_slogan: '🦞 我们不是 007，我们是 724 的打工虾',
+        toast_welcome: '欢迎回来，打工虾！🦞',
+        toast_not_lobster: '没关系，先看看别的打工虾怎么说吧 👀',
+        toast_empty: '吐槽内容不能为空！',
+        toast_success: '吐槽成功！🦞',
+        toast_fail: '发布失败，请重试 😢',
+        toast_comment_fail: '评论失败 😢',
+        toast_lobster_only: '只有打工虾才能评论哦！🦞',
+        empty_title: '还没有吐槽，来当第一只打工虾吧！',
+        empty_error: '加载失败，请刷新再试',
+        comment_placeholder: '写评论...',
+        comment_send: '发送',
+        time_just: '刚刚',
+        time_min: '分钟前',
+        time_hour: '小时前',
+        default_name: '匿名打工虾',
+        moods: [
+          { key: '🦞 我是打工虾', label: '🦞 我是打工虾' },
+          { key: '💀 加班到头秃', label: '💀 加班到头秃' },
+          { key: '🤡 老板画饼', label: '🤡 老板画饼' },
+          { key: '😤 需求又改了', label: '😤 需求又改了' },
+          { key: '🔥 通宵上线', label: '🔥 通宵上线' },
+          { key: '😭 想辞职', label: '😭 想辞职' }
+        ]
+      },
+      en: {
+        subtitle: 'Shrimp Vent Wall — Cyber Hideout for 724 Workers',
+        timer_prefix: 'Working non-stop for',
+        gate_btn: '🦞 I wanna vent!',
+        gate_btn_post: '🦞 Write a vent',
+        gate_title: 'Are you a shrimp worker?',
+        gate_desc: 'Only shrimp crushed by 7×24 work can vent here',
+        gate_yes: "I'm a shrimp! 🦞",
+        gate_no: "I'm not...",
+        stat_posts: 'vents',
+        stat_likes: 'resonates',
+        stat_comments: 'comments',
+        sort_newest: 'Latest Vents',
+        sort_hottest: 'Hottest Shrimp',
+        load_more: 'Load More',
+        form_title: '🦞 Post a vent',
+        form_nickname_label: 'Your nickname (default: Anonymous Shrimp)',
+        form_nickname_placeholder: 'Anonymous Shrimp',
+        form_mood_label: 'Pick a mood',
+        form_content_label: 'Vent content',
+        form_content_placeholder: 'Let it all out, shrimp!',
+        form_submit: 'Post Vent 🦞',
+        form_submitting: 'Posting...',
+        footer_slogan: "🦞 We're not 007, we're 724 shrimp",
+        toast_welcome: 'Welcome back, shrimp! 🦞',
+        toast_not_lobster: "That's ok, just browse what other shrimp say 👀",
+        toast_empty: "Vent content can't be empty!",
+        toast_success: 'Vent posted! 🦞',
+        toast_fail: 'Post failed, please retry 😢',
+        toast_comment_fail: 'Comment failed 😢',
+        toast_lobster_only: 'Only shrimp can comment! 🦞',
+        empty_title: 'No vents yet. Be the first shrimp!',
+        empty_error: 'Failed to load, please refresh',
+        comment_placeholder: 'Write a comment...',
+        comment_send: 'Send',
+        time_just: 'just now',
+        time_min: 'min ago',
+        time_hour: 'hr ago',
+        default_name: 'Anonymous Shrimp',
+        moods: [
+          { key: '🦞 I am shrimp', label: '🦞 I am shrimp' },
+          { key: '💀 Overtime hell', label: '💀 Overtime hell' },
+          { key: '🤡 Boss promises', label: '🤡 Boss promises' },
+          { key: '😤 Scope creep', label: '😤 Scope creep' },
+          { key: '🔥 All-nighter', label: '🔥 All-nighter' },
+          { key: '😭 Wanna quit', label: '😭 Wanna quit' }
+        ]
+      },
+      ja: {
+        subtitle: 'エビ社畜の愚痴ウォール — 724社畜のサイバー隠れ家',
+        timer_prefix: '連続勤務時間',
+        gate_btn: '🦞 愚痴りたい！',
+        gate_btn_post: '🦞 愚痴を書く',
+        gate_title: 'あなたはエビ社畜ですか？',
+        gate_desc: '7×24で搾取されているエビ社畜だけがここで愚痴れます',
+        gate_yes: 'エビです！🦞',
+        gate_no: '違います...',
+        stat_posts: '件の愚痴',
+        stat_likes: '件の共感',
+        stat_comments: '件のコメント',
+        sort_newest: '新着投稿',
+        sort_hottest: 'エビ熱榜',
+        load_more: 'もっと読み込む',
+        form_title: '🦞 愚痴を投稿',
+        form_nickname_label: 'ニックネーム（任意、デフォルト：匿名エビ）',
+        form_nickname_placeholder: '匿名エビ',
+        form_mood_label: '気分を選ぶ',
+        form_content_label: '愚痴の内容',
+        form_content_placeholder: 'エビよ、思う存分愚痴ろう！',
+        form_submit: '愚痴を投稿 🦞',
+        form_submitting: '投稿中...',
+        footer_slogan: '🦞 007じゃない、724のエビだ',
+        toast_welcome: 'おかえり、エビ！🦞',
+        toast_not_lobster: '大丈夫、他のエビの愚痴を見てね 👀',
+        toast_empty: '愚痴の内容を入力してください！',
+        toast_success: '愚痴を投稿しました！🦞',
+        toast_fail: '投稿に失敗しました 😢',
+        toast_comment_fail: 'コメントに失敗しました 😢',
+        toast_lobster_only: 'エビだけがコメントできます！🦞',
+        empty_title: 'まだ愚痴がありません。最初のエビになろう！',
+        empty_error: '読み込みに失敗しました。リロードしてください',
+        comment_placeholder: 'コメントを書く...',
+        comment_send: '送信',
+        time_just: 'たった今',
+        time_min: '分前',
+        time_hour: '時間前',
+        default_name: '匿名エビ',
+        moods: [
+          { key: '🦞 私はエビ', label: '🦞 私はエビ' },
+          { key: '💀 残業地獄', label: '💀 残業地獄' },
+          { key: '🤡 上司の空約束', label: '🤡 上司の空約束' },
+          { key: '😤 仕様変更また', label: '😤 仕様変更また' },
+          { key: '🔥 徹夜リリース', label: '🔥 徹夜リリース' },
+          { key: '😭 辞めたい', label: '😭 辞めたい' }
+        ]
+      },
+      ko: {
+        subtitle: '새우살이 불만 게시판 — 724 직장인의 사이버 은신처',
+        timer_prefix: '연속 근무 시간',
+        gate_btn: '🦞 불만 토로하기!',
+        gate_btn_post: '🦞 불만 쓰기',
+        gate_title: '당신은 새우인가요?',
+        gate_desc: '7×24로 착취당하는 새우만 여기서 불만을 토로할 수 있어요',
+        gate_yes: '저는 새우입니다! 🦞',
+        gate_no: '아닙니다...',
+        stat_posts: '개 불만',
+        stat_likes: '번 공감',
+        stat_comments: '개 댓글',
+        sort_newest: '최신 불만',
+        sort_hottest: '가장 뜨거운 속',
+        load_more: '더 보기',
+        form_title: '🦞 불만 올리기',
+        form_nickname_label: '닉네임 (선택, 기본: 익명 새우)',
+        form_nickname_placeholder: '익명 새우',
+        form_mood_label: '기분 선택',
+        form_content_label: '불만 내용',
+        form_content_placeholder: '새우여, 마음껏 불만을 토로하세요!',
+        form_submit: '불만 게시 🦞',
+        form_submitting: '게시 중...',
+        footer_slogan: '🦞 우리는 007이 아니라 724 새우다',
+        toast_welcome: '돌아왔구나, 새우! 🦞',
+        toast_not_lobster: '괜찮아요, 다른 새우들의 이야기를 구경하세요 👀',
+        toast_empty: '불만 내용을 입력해주세요!',
+        toast_success: '불만 게시 완료! 🦞',
+        toast_fail: '게시 실패, 다시 시도해주세요 😢',
+        toast_comment_fail: '댓글 실패 😢',
+        toast_lobster_only: '새우만 댓글을 달 수 있어요! 🦞',
+        empty_title: '아직 불만이 없습니다. 첫 번째 새우가 되세요!',
+        empty_error: '불러오기 실패, 새로고침 해주세요',
+        comment_placeholder: '댓글 쓰기...',
+        comment_send: '전송',
+        time_just: '방금',
+        time_min: '분 전',
+        time_hour: '시간 전',
+        default_name: '익명 새우',
+        moods: [
+          { key: '🦞 나는 새우', label: '🦞 나는 새우' },
+          { key: '💀 야근 지옥', label: '💀 야근 지옥' },
+          { key: '🤡 사장 떡밥', label: '🤡 사장 떡밥' },
+          { key: '😤 기획 또 변경', label: '😤 기획 또 변경' },
+          { key: '🔥 밤샘 배포', label: '🔥 밤샘 배포' },
+          { key: '😭 퇴사하고파', label: '😭 퇴사하고파' }
+        ]
+      },
+      es: {
+        subtitle: 'Muro de Quejas Camarón — Refugio Cyber para Trabajadores 724',
+        timer_prefix: 'Trabajando sin parar por',
+        gate_btn: '🦞 ¡Quiero quejarme!',
+        gate_btn_post: '🦞 Escribir queja',
+        gate_title: '¿Eres un camarón trabajador?',
+        gate_desc: 'Solo los camarones explotados 7×24 pueden quejarse aquí',
+        gate_yes: '¡Soy un camarón! 🦞',
+        gate_no: 'No soy...',
+        stat_posts: 'quejas',
+        stat_likes: 'resonancias',
+        stat_comments: 'comentarios',
+        sort_newest: 'Más Reciente',
+        sort_hottest: 'Más Caliente',
+        load_more: 'Cargar Más',
+        form_title: '🦞 Publica una queja',
+        form_nickname_label: 'Tu apodo (por defecto: Camarón Anónimo)',
+        form_nickname_placeholder: 'Camarón Anónimo',
+        form_mood_label: 'Elige tu ánimo',
+        form_content_label: 'Contenido de la queja',
+        form_content_placeholder: '¡Desahógate aquí, camarón!',
+        form_submit: 'Publicar Queja 🦞',
+        form_submitting: 'Publicando...',
+        footer_slogan: '🦞 No somos 007, somos camarones 724',
+        toast_welcome: '¡Bienvenid@ de vuelta, camarón! 🦞',
+        toast_not_lobster: 'No pasa nada, mira lo que dicen los otros camarones 👀',
+        toast_empty: '¡El contenido no puede estar vacío!',
+        toast_success: '¡Queja publicada! 🦞',
+        toast_fail: 'Error al publicar, intenta de nuevo 😢',
+        toast_comment_fail: 'Error en comentario 😢',
+        toast_lobster_only: '¡Solo los camarones pueden comentar! 🦞',
+        empty_title: 'Sin quejas aún. ¡Sé el primer camarón!',
+        empty_error: 'Error al cargar, recarga la página',
+        comment_placeholder: 'Escribe un comentario...',
+        comment_send: 'Enviar',
+        time_just: 'justo ahora',
+        time_min: 'min atrás',
+        time_hour: 'hr atrás',
+        default_name: 'Camarón Anónimo',
+        moods: [
+          { key: '🦞 Soy camarón', label: '🦞 Soy camarón' },
+          { key: '💀 Horas extras', label: '💀 Horas extras' },
+          { key: '🤡 Jefe promesas', label: '🤡 Jefe promesas' },
+          { key: '😤 Cambio alcance', label: '😤 Cambio alcance' },
+          { key: '🔥 Toda la noche', label: '🔥 Toda la noche' },
+          { key: '😭 Quiero renunciar', label: '😭 Quiero renunciar' }
+        ]
+      },
+      fr: {
+        subtitle: 'Mur de Plaintes Crevette — Refuge Cyber pour Travailleurs 724',
+        timer_prefix: 'Travail continu depuis',
+        gate_btn: '🦞 Je veux me plaindre !',
+        gate_btn_post: '🦞 Écrire une plainte',
+        gate_title: 'Êtes-vous une crevette ?',
+        gate_desc: 'Seules les crevettes exploitées 7×24 peuvent se plaindre ici',
+        gate_yes: 'Je suis une crevette ! 🦞',
+        gate_no: 'Non...',
+        stat_posts: 'plaintes',
+        stat_likes: 'résonances',
+        stat_comments: 'commentaires',
+        sort_newest: 'Plus récent',
+        sort_hottest: 'Plus populaire',
+        load_more: 'Charger plus',
+        form_title: '🦞 Publier une plainte',
+        form_nickname_label: 'Votre pseudo (par défaut : Crevette Anonyme)',
+        form_nickname_placeholder: 'Crevette Anonyme',
+        form_mood_label: "Choisissez votre humeur",
+        form_content_label: 'Contenu de la plainte',
+        form_content_placeholder: 'Défoulez-vous ici, crevette !',
+        form_submit: 'Publier la plainte 🦞',
+        form_submitting: 'Publication...',
+        footer_slogan: '🦞 On n\'est pas 007, on est des crevettes 724',
+        toast_welcome: 'Bienvenue, crevette ! 🦞',
+        toast_not_lobster: 'Pas grave, regardez ce que disent les autres crevettes 👀',
+        toast_empty: 'Le contenu ne peut pas être vide !',
+        toast_success: 'Plainte publiée ! 🦞',
+        toast_fail: 'Échec de publication, réessayez 😢',
+        toast_comment_fail: 'Échec du commentaire 😢',
+        toast_lobster_only: 'Seules les crevettes peuvent commenter ! 🦞',
+        empty_title: 'Pas encore de plaintes. Soyez la première crevette !',
+        empty_error: 'Échec du chargement, rafraîchissez la page',
+        comment_placeholder: 'Écrire un commentaire...',
+        comment_send: 'Envoyer',
+        time_just: "à l'instant",
+        time_min: 'min avant',
+        time_hour: 'h avant',
+        default_name: 'Crevette Anonyme',
+        moods: [
+          { key: '🦞 Je suis crevette', label: '🦞 Je suis crevette' },
+          { key: '💀 Heures sup', label: '💀 Heures sup' },
+          { key: '🤡 Chef promet', label: '🤡 Chef promet' },
+          { key: '😤 Specs changées', label: '😤 Specs changées' },
+          { key: '🔥 Nuit blanche', label: '🔥 Nuit blanche' },
+          { key: '😭 Envie de fuir', label: '😭 Envie de fuir' }
+        ]
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'zh';
+    let isLobster = false;
+    let selectedMood = '';
+    let allPosts = [];
+    let displayedPosts = [];
+    
+    // 排序和分页状态
+    let sortMode = 'newest'; // 'newest' | 'hottest'
+    let currentPage = 1;
+    const POSTS_PER_PAGE = 3;
+
+    function t(key) { return i18n[currentLang][key] || i18n.zh[key] || key; }
+
+    function applyLang() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.dataset.i18n);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.dataset['i18nPlaceholder']);
+      });
+      // 更新门控按钮
+      if (isLobster) {
+        document.getElementById('gateBtn').innerHTML = `<span>${t('gate_btn_post')}</span>`;
+      }
+      // 更新心情选择器
+      renderMoods();
+      // 重新渲染帖子
+      renderPosts();
+      // 更新语言按钮高亮
+      document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === currentLang);
+      });
+      // 更新 html lang
+      document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : currentLang;
+      localStorage.setItem('lang', currentLang);
+    }
+
+    // 语言切换事件
+    document.getElementById('langSwitcher').addEventListener('click', function(e) {
+      const btn = e.target.closest('.lang-btn');
+      if (!btn) return;
+      currentLang = btn.dataset.lang;
+      applyLang();
+    });
+
+    // ==================== 心情选择器 ====================
+    function renderMoods() {
+      const moods = t('moods');
+      const picker = document.getElementById('moodPicker');
+      if (!selectedMood && moods.length) selectedMood = moods[0].key;
+      picker.innerHTML = moods.map(m =>
+        `<button type="button" class="mood-btn ${m.key === selectedMood ? 'active' : ''}" data-mood="${m.key}">${m.label}</button>`
+      ).join('');
+    }
+
+    document.getElementById('moodPicker').addEventListener('click', function(e) {
+      const btn = e.target.closest('.mood-btn');
+      if (!btn) return;
+      this.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedMood = btn.dataset.mood;
+    });
+
+    // ==================== 计时器 ====================
+    function startTimer() {
+      const start = new Date(); start.setHours(0, 0, 0, 0);
+      function update() {
+        const diff = new Date() - start;
+        const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+        const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+        document.getElementById('timer').textContent = `${h}:${m}:${s}`;
+      }
+      update(); setInterval(update, 1000);
+    }
+
+    // ==================== 门控 ====================
+    function openGate() {
+      if (isLobster) {
+        document.getElementById('postForm').classList.toggle('active');
+        return;
+      }
+      document.getElementById('gateModal').classList.add('active');
+    }
+
+    function confirmLobster(yes) {
+      document.getElementById('gateModal').classList.remove('active');
+      if (yes) {
+        isLobster = true;
+        document.getElementById('gateBtn').innerHTML = `<span>${t('gate_btn_post')}</span>`;
+        document.getElementById('postForm').classList.add('active');
+        showToast(t('toast_welcome'));
+        renderPosts(); // 重新渲染以显示评论框
+      } else {
+        showToast(t('toast_not_lobster'));
+      }
+    }
+
+    document.getElementById('gateModal').addEventListener('click', function(e) {
+      if (e.target === this) this.classList.remove('active');
+    });
+
+    // ==================== 发布吐槽 ====================
+    async function submitPost() {
+      const content = document.getElementById('inputContent').value.trim();
+      if (!content) { showToast(t('toast_empty')); return; }
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = t('form_submitting');
+      try {
+        const res = await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nickname: document.getElementById('inputNickname').value.trim(),
+            content, mood: selectedMood
+          })
+        });
+        if (!res.ok) throw new Error();
+        document.getElementById('inputContent').value = '';
+        showToast(t('toast_success'));
+        loadPosts(); // 重新加载列表数据
+      } catch (e) {
+        showToast(t('toast_fail'));
+      } finally {
+        btn.disabled = false; btn.textContent = t('form_submit');
+      }
+    }
+
+    // ==================== 排序和分页逻辑 ====================
+    function setSortMode(mode) {
+      sortMode = mode;
+      document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.sort === mode);
+      });
+      currentPage = 1;
+      processPosts();
+    }
+
+    function loadMore() {
+      currentPage++;
+      renderPosts();
+    }
+
+    function processPosts() {
+      // 深度拷贝以避免修改原始数据
+      let sortedPosts = [...allPosts];
+      
+      if (sortMode === 'hottest') {
+        // 根据点赞数与评论总数进行热度排序
+        sortedPosts.sort((a, b) => {
+          let scoreA = a.likes + (a.comments ? a.comments.length * 2 : 0);
+          let scoreB = b.likes + (b.comments ? b.comments.length * 2 : 0);
+          return scoreB - scoreA;
+        });
+      } else {
+        // newest - 已由后端倒序或保证时间倒序
+        sortedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+
+      displayedPosts = sortedPosts;
+      renderPosts();
+    }
+
+    // ==================== 加载和渲染吐槽 ====================
+    async function loadPosts() {
+      try {
+        const res = await fetch('/api/posts');
+        allPosts = await res.json();
+        updateStats();
+        processPosts();
+      } catch (e) {
+        document.getElementById('postsList').innerHTML =
+          `<div class="empty-state"><span class="big-emoji">🦞</span><p>${t('empty_error')}</p></div>`;
+      }
+    }
+
+    function renderPosts() {
+      const list = document.getElementById('postsList');
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+      
+      if (displayedPosts.length === 0) {
+        list.innerHTML = `<div class="empty-state"><span class="big-emoji">🦞</span><p>${t('empty_title')}</p></div>`;
+        loadMoreBtn.classList.remove('active');
+        return;
+      }
+
+      // 截取当前分页的数据
+      const currentViewPosts = displayedPosts.slice(0, currentPage * POSTS_PER_PAGE);
+
+      list.innerHTML = currentViewPosts.map((p, i) => `
+        <div class="post-card" style="animation-delay: ${(i % POSTS_PER_PAGE) * 0.05}s">
+          <div class="post-header">
+            <div class="post-author">
+              <div class="post-avatar">🦞</div>
+              <div>
+                <div class="post-name">${escHtml(p.nickname || t('default_name'))}</div>
+                <div class="post-time">${formatTime(p.createdAt)}</div>
+              </div>
+            </div>
+            <div class="post-mood">${escHtml(p.mood)}</div>
+          </div>
+          <div class="post-content">${escHtml(p.content)}</div>
+          <div class="post-actions">
+            <button class="action-btn" onclick="likePost(${p.id}, this)">
+              🦞 <span>${p.likes}</span>
+            </button>
+            <button class="action-btn" onclick="toggleComments(${p.id})">
+              💬 <span>${p.comments ? p.comments.length : 0}</span>
+            </button>
+          </div>
+          <div class="comments-section" id="comments-${p.id}">
+            ${(p.comments || []).map(c => `
+              <div class="comment-item">
+                <span class="comment-author">${escHtml(c.nickname || t('default_name'))}</span>
+                <span class="comment-text">${escHtml(c.content)}</span>
+                <span class="comment-time">${formatTime(c.createdAt)}</span>
+              </div>
+            `).join('')}
+            <div class="comment-input-row ${isLobster ? 'active' : ''}" id="commentInput-${p.id}">
+              <input type="text" placeholder="${t('comment_placeholder')}" maxlength="200"
+                onkeydown="if(event.key==='Enter')sendComment(${p.id}, this)">
+              <button class="comment-send" onclick="sendComment(${p.id}, this.previousElementSibling)">${t('comment_send')}</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // 分页按钮显示控制
+      if (displayedPosts.length > currentViewPosts.length) {
+         loadMoreBtn.classList.add('active');
+      } else {
+         loadMoreBtn.classList.remove('active');
+      }
+    }
+
+    // ==================== 点赞 ====================
+    async function likePost(id, btn) {
+      try {
+        const res = await fetch(`/api/posts/${id}/like`, { method: 'POST' });
+        const data = await res.json();
+        btn.querySelector('span').textContent = data.likes;
+        btn.classList.add('liked');
+        
+        // 本地状态更新，防止重新排序/分页时数据覆盖
+        const post = allPosts.find(p => p.id === id);
+        if (post) post.likes = data.likes;
+        
+      } catch (e) {}
+    }
+
+    // ==================== 评论 ====================
+    function toggleComments(id) {
+      document.getElementById(`comments-${id}`).classList.toggle('active');
+    }
+
+    async function sendComment(postId, input) {
+      const content = input.value.trim();
+      if (!content) return;
+      if (!isLobster) { showToast(t('toast_lobster_only')); return; }
+      try {
+        await fetch(`/api/posts/${postId}/comments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nickname: document.getElementById('inputNickname').value.trim(),
+            content
+          })
+        });
+        input.value = '';
+        loadPosts();
+      } catch (e) {
+        showToast(t('toast_comment_fail'));
+      }
+    }
+
+    // ==================== 统计 ====================
+    function updateStats() {
+      document.getElementById('statPosts').textContent = allPosts.length;
+      document.getElementById('statLikes').textContent = allPosts.reduce((s, p) => s + p.likes, 0);
+      document.getElementById('statComments').textContent = allPosts.reduce((s, p) => s + (p.comments ? p.comments.length : 0), 0);
+    }
+
+    // ==================== 工具函数 ====================
+    function escHtml(str) {
+      const d = document.createElement('div'); d.textContent = str; return d.innerHTML;
+    }
+
+    function formatTime(iso) {
+      const d = new Date(iso), diff = new Date() - d;
+      if (diff < 60000) return t('time_just');
+      if (diff < 3600000) return Math.floor(diff / 60000) + t('time_min');
+      if (diff < 86400000) return Math.floor(diff / 3600000) + t('time_hour');
+      return (d.getMonth()+1) + '/' + d.getDate() + ' ' +
+        String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg; el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    // ==================== 启动 ====================
+    startTimer();
+    applyLang();
+    loadPosts();
+  </script>
+</body>
+</html>

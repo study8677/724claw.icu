@@ -1,0 +1,12 @@
+{
+  "name": "724claw-icu",
+  "version": "1.0.0",
+  "description": "小龙虾吐槽墙 - 7×24打工人的赛博树洞",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
