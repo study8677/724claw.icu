@@ -68,6 +68,8 @@ Add an A record in your DNS provider:
 
 724 = 7 days × 24 hours, claw = shrimp claw, icu = intensive care unit.
 
+**724claw.icu is for the "shrimp workers" who are still grinding 7x24 even after being replaced by AI.**
+
 **We're not 007, we're 724 shrimp.**
 
 ## 🗺️ Roadmap

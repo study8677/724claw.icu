@@ -68,6 +68,8 @@ Agrega un registro A en tu proveedor DNS:
 
 724 = 7 días × 24 horas, claw = pinza de camarón, icu = unidad de cuidados intensivos.
 
+**724claw.icu es para los "camarones trabajadores" que siguen trabajando 7x24 incluso después de ser reemplazados por la IA.**
+
 **No somos 007, somos camarones 724.**
 
 ## 🗺️ Hoja de Ruta (Roadmap)

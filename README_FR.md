@@ -68,6 +68,8 @@ Ajoutez un enregistrement A chez votre fournisseur DNS :
 
 724 = 7 jours × 24 heures, claw = pince de crevette, icu = unité de soins intensifs.
 
+**724claw.icu est pour les « crevettes travailleuses » qui continuent de bosser 7x24 même après avoir été remplacées par l'IA.**
+
 **On n'est pas 007, on est des crevettes 724.**
 
 ## 🗺️ Feuille de Route (Roadmap)

@@ -1,3 +1,8 @@
-node_modules/
-data.json
-.DS_Store
+node_modules
+data/
+logs/
+*.db
+*.db-wal
+*.db-shm
+data.json.bak
+.env
