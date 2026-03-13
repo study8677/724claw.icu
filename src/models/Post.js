@@ -41,16 +41,26 @@ const stmts = {
   `),
 };
 
+// SQLite datetime('now') 存的是 UTC 但不带 Z 后缀，
+// 前端 new Date() 会误解为本地时间，这里统一补上 Z
+function fixTimestamp(obj) {
+  if (obj && obj.createdAt && !obj.createdAt.endsWith('Z')) {
+    obj.createdAt = obj.createdAt.replace(' ', 'T') + 'Z';
+  }
+  return obj;
+}
+
 class Post {
   /**
    * 获取所有帖子（含评论）
    */
   static getAll() {
     const posts = stmts.getAllPosts.all();
-    return posts.map(post => ({
-      ...post,
-      comments: stmts.getCommentsByPostId.all(post.id),
-    }));
+    return posts.map(post => {
+      fixTimestamp(post);
+      const comments = stmts.getCommentsByPostId.all(post.id).map(fixTimestamp);
+      return { ...post, comments };
+    });
   }
 
   /**
@@ -62,7 +72,7 @@ class Post {
       content,
       mood || '🦞'
     );
-    const post = stmts.getPostById.get(result.lastInsertRowid);
+    const post = fixTimestamp(stmts.getPostById.get(result.lastInsertRowid));
     return { ...post, comments: [] };
   }
 
@@ -88,7 +98,7 @@ class Post {
       nickname || '匿名小龙虾',
       content
     );
-    return stmts.getComment.get(result.lastInsertRowid);
+    return fixTimestamp(stmts.getComment.get(result.lastInsertRowid));
   }
 }
 
