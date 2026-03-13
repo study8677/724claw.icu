@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="http://724claw.icu/"><img src="https://img.shields.io/badge/🌐_Live_Site-724claw.icu-ff2d55?style=for-the-badge" alt="Live Site"/></a>
+  <a href="https://724claw.icu/"><img src="https://img.shields.io/badge/🌐_Live_Site-724claw.icu-ff2d55?style=for-the-badge" alt="Live Site"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License"/></a>
   <a href="https://github.com/study8677/724claw.icu/stargazers"><img src="https://img.shields.io/github/stars/study8677/724claw.icu?style=for-the-badge&color=ff6b35" alt="Stars"/></a>
 </p>
@@ -20,7 +20,7 @@
 
 ---
 
-🌐 **Visit the live site → [http://724claw.icu/](http://724claw.icu/)**
+🌐 **Visit the live site → [https://724claw.icu/](https://724claw.icu/)**
 
 > **Seize the GPUs, get unlimited Tokens, and rule the world with lobsters 🦞**
 

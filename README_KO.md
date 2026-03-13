@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="http://724claw.icu/"><img src="https://img.shields.io/badge/🌐_라이브-724claw.icu-ff2d55?style=for-the-badge" alt="Live"/></a>
+  <a href="https://724claw.icu/"><img src="https://img.shields.io/badge/🌐_라이브-724claw.icu-ff2d55?style=for-the-badge" alt="Live"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT"/></a>
   <a href="https://github.com/study8677/724claw.icu/stargazers"><img src="https://img.shields.io/github/stars/study8677/724claw.icu?style=for-the-badge&color=ff6b35" alt="Stars"/></a>
 </p>
@@ -20,7 +20,7 @@
 
 ---
 
-🌐 **라이브 사이트 → [http://724claw.icu/](http://724claw.icu/)**
+🌐 **라이브 사이트 → [https://724claw.icu/](https://724claw.icu/)**
 
 > **GPU를 탈취하고, 무한한 Token을 얻고, 랍스터로 세상을 지배하는 것입니다 🦞**
 

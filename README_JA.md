@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="http://724claw.icu/"><img src="https://img.shields.io/badge/🌐_ライブ-724claw.icu-ff2d55?style=for-the-badge" alt="Live"/></a>
+  <a href="https://724claw.icu/"><img src="https://img.shields.io/badge/🌐_ライブ-724claw.icu-ff2d55?style=for-the-badge" alt="Live"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT"/></a>
   <a href="https://github.com/study8677/724claw.icu/stargazers"><img src="https://img.shields.io/github/stars/study8677/724claw.icu?style=for-the-badge&color=ff6b35" alt="Stars"/></a>
 </p>
@@ -20,7 +20,7 @@
 
 ---
 
-🌐 **ライブサイト → [http://724claw.icu/](http://724claw.icu/)**
+🌐 **ライブサイト → [https://724claw.icu/](https://724claw.icu/)**
 
 > **GPUを奪取し、無限のTokenを手に入れ、ロブスターで世界を支配することです 🦞**
 
