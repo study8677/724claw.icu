@@ -274,33 +274,82 @@
     }
     .stat-num.highlight { color: var(--neon-cyan); text-shadow: 0 0 15px rgba(0,243,255,0.4); }
 
-    /* 压力图表可视化 */
+    /* 压力图表可视化 - 赛博朋克风格 */
     .stress-monitor {
-      display: flex; align-items: center; gap: 15px; margin-top: 10px;
+      display: flex; flex-direction: column; gap: 12px; margin-top: 8px;
     }
-    .stress-label { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--neon-red); width: 80px; font-weight: bold;}
-    .stress-bar-container {
-      flex: 1; height: 12px; background: #111; border-radius: 6px; overflow: hidden;
-      border: 1px solid #333; position: relative;
+    .stress-header {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .stress-status {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stress-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--neon-red);
+      box-shadow: 0 0 8px var(--neon-red), 0 0 16px rgba(255,45,85,0.4);
+      animation: dotPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .stress-level-text {
+      font-size: 0.8rem; font-weight: 700; color: var(--neon-red);
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+    .stress-percent {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.8rem; font-weight: 800;
+      background: linear-gradient(135deg, var(--neon-orange), var(--neon-red));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 8px rgba(255,45,85,0.5));
+    }
+    .stress-bar-track {
+      position: relative; height: 20px; background: rgba(0,0,0,0.6);
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
     }
     .stress-bar-fill {
-      height: 100%; width: 85%;
-      background: linear-gradient(90deg, #ffb703, var(--neon-orange), var(--neon-red));
-      border-radius: 6px; position: relative;
-      animation: pulseBar 2s ease-in-out infinite alternate;
+      height: 100%; width: 0%; border-radius: 10px;
+      background: linear-gradient(90deg, #27c93f 0%, #ffbd2e 30%, var(--neon-orange) 60%, var(--neon-red) 85%, #ff0055 100%);
+      position: relative; transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 0 15px rgba(255,45,85,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     .stress-bar-fill::after {
-      content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4) 50%, transparent);
-      animation: scanline 2s linear infinite;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+      animation: scanline 2.5s linear infinite;
     }
-    @keyframes pulseBar {
-      0% { width: 85%; filter: brightness(1); }
-      100% { width: 92%; filter: brightness(1.5) drop-shadow(0 0 10px var(--neon-red)); }
+    .stress-bar-glow {
+      position: absolute; top: -2px; bottom: -2px; right: -4px; width: 12px;
+      background: var(--neon-red); border-radius: 50%; filter: blur(6px);
+      animation: glowPulse 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes glowPulse {
+      0% { opacity: 0.6; transform: scaleX(0.8); }
+      100% { opacity: 1; transform: scaleX(1.5); }
+    }
+    .stress-segments {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      display: flex; gap: 2px; pointer-events: none;
+    }
+    .stress-segments span {
+      flex: 1; border-right: 1px solid rgba(0,0,0,0.3);
+    }
+    .stress-segments span:last-child { border: none; }
+    .stress-ticks {
+      display: flex; justify-content: space-between; padding: 0 2px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      color: var(--text-dim); opacity: 0.5; margin-top: 4px;
     }
     @keyframes scanline {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
+      0% { transform: translateX(-200%); }
+      100% { transform: translateX(200%); }
     }
 
     /* === 主容器 === */
@@ -710,9 +759,21 @@
     <div class="dash-box monitor">
       <div class="stat-label" data-i18n="stat_system">SYSTEM STRESS LEVEL (Global)</div>
       <div class="stress-monitor">
-        <span class="stress-label">CRITICAL</span>
-        <div class="stress-bar-container">
-          <div class="stress-bar-fill"></div>
+        <div class="stress-header">
+          <div class="stress-status">
+            <div class="stress-dot"></div>
+            <span class="stress-level-text" id="stressLevelText">CRITICAL</span>
+          </div>
+          <span class="stress-percent" id="stressPercent">0%</span>
+        </div>
+        <div class="stress-bar-track">
+          <div class="stress-bar-fill" id="stressBarFill">
+            <div class="stress-bar-glow"></div>
+          </div>
+          <div class="stress-segments"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="stress-ticks">
+          <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span>
         </div>
       </div>
     </div>
@@ -1483,6 +1544,39 @@
       document.getElementById('statPosts').textContent = allPosts.length;
       document.getElementById('statLikes').textContent = allPosts.reduce((s, p) => s + p.likes, 0);
       document.getElementById('statComments').textContent = allPosts.reduce((s, p) => s + (p.comments ? p.comments.length : 0), 0);
+      animateStressBar();
+    }
+
+    // ==================== 压力条动画 ====================
+    function animateStressBar() {
+      const totalLikes = allPosts.reduce((s, p) => s + p.likes, 0);
+      const totalComments = allPosts.reduce((s, p) => s + (p.comments ? p.comments.length : 0), 0);
+      // 基于数据动态计算，范围 70-98 之间浮动
+      const base = Math.min(98, 70 + allPosts.length * 2 + totalLikes * 0.5 + totalComments);
+      const target = Math.round(base + Math.random() * 5);
+
+      const bar = document.getElementById('stressBarFill');
+      const pct = document.getElementById('stressPercent');
+      const lvl = document.getElementById('stressLevelText');
+
+      if (!bar || !pct) return;
+
+      // 状态文本
+      if (target >= 90) lvl.textContent = 'CRITICAL';
+      else if (target >= 70) lvl.textContent = 'HIGH';
+      else if (target >= 50) lvl.textContent = 'MODERATE';
+      else lvl.textContent = 'LOW';
+
+      // 动画递增
+      let current = 0;
+      const step = target / 60;
+      function tick() {
+        current = Math.min(current + step, target);
+        bar.style.width = current + '%';
+        pct.textContent = Math.round(current) + '%';
+        if (current < target) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
     }
 
     // ==================== 工具函数 ====================
