@@ -37,6 +37,31 @@
 
     code, .mono { font-family: 'JetBrains Mono', monospace; }
 
+    /* === GitHub Star 按钮 === */
+    .github-star {
+      position: fixed; top: 16px; left: 16px; z-index: 100;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(20,20,31,0.9);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.3s ease;
+    }
+    .github-star:hover {
+      border-color: var(--neon-cyan);
+      color: var(--text-bright);
+      box-shadow: 0 0 15px rgba(0,243,255,0.15);
+      transform: translateY(-1px);
+    }
+    .github-star svg { fill: currentColor; transition: all 0.3s; }
+    .github-star:hover svg { fill: var(--neon-cyan); }
+    .github-star .star-icon { color: #ffbd2e; font-size: 1rem; }
+
     /* === 语言切换器 === */
     .lang-switcher {
       position: fixed; top: 16px; right: 16px; z-index: 100;
@@ -523,6 +548,13 @@
 <body>
   <div class="bg-particles"></div>
 
+  <!-- GitHub Star 按钮 -->
+  <a class="github-star" href="https://github.com/study8677/724claw.icu" target="_blank" title="⭐ Star on GitHub">
+    <svg height="18" width="18" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <span class="star-icon">⭐</span>
+    <span>Star</span>
+  </a>
+
   <!-- 语言切换器 -->
   <div class="lang-switcher" id="langSwitcher">
     <button class="lang-btn active" data-lang="zh">中文</button>
@@ -624,8 +656,11 @@
 
   <footer class="footer">
     <p class="slogan" data-i18n="footer_slogan"></p>
-    <p style="margin-bottom: 20px;">
-      <a href="https://github.com/study8677/724claw.icu" target="_blank">GitHub</a>
+    <p style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+      <a href="https://github.com/study8677/724claw.icu" target="_blank" style="display: inline-flex; align-items: center; gap: 6px;">
+        <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Star on GitHub
+      </a>
       · 724claw.icu
     </p>
     <p class="disclaimer" data-i18n="footer_disclaimer" style="font-size: 0.75rem; opacity: 0.5; max-width: 650px; margin: 0 auto; line-height: 1.6;"></p>
