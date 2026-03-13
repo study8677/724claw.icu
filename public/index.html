@@ -494,6 +494,89 @@
       border-radius: 8px; cursor: pointer; font-size: 0.85rem; white-space: nowrap;
     }
 
+    /* === 搜索 & 工具条 === */
+    .toolbar-row {
+      display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
+    }
+    .search-box {
+      flex: 1; min-width: 200px; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 14px 10px 36px; color: var(--text-main);
+      font-size: 0.9rem; font-family: inherit; transition: border-color 0.3s;
+    }
+    .search-box:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 12px rgba(0,243,255,0.15); }
+    .search-wrapper { position: relative; flex: 1; min-width: 200px; }
+    .search-wrapper::before {
+      content: '🔍'; position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 0.9rem; pointer-events: none;
+    }
+    .random-btn {
+      background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+      border: none; color: #fff; padding: 10px 18px; border-radius: 8px;
+      cursor: pointer; font-size: 0.9rem; white-space: nowrap;
+      transition: all 0.3s; font-weight: 600;
+    }
+    .random-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(180,41,249,0.4); }
+
+    /* === 复制按钮 === */
+    .copy-btn {
+      background: none; border: none; color: var(--text-dim); cursor: pointer;
+      font-size: 0.85rem; display: flex; align-items: center; gap: 4px;
+      transition: color 0.2s;
+    }
+    .copy-btn:hover { color: var(--neon-cyan); }
+    .copy-btn.copied { color: #27c93f; }
+
+    /* === 置顶/精选标记 === */
+    .pinned-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: linear-gradient(135deg, rgba(255,189,46,0.15), rgba(255,107,53,0.15));
+      border: 1px solid rgba(255,189,46,0.3);
+      color: #ffbd2e; font-size: 0.72rem; padding: 2px 8px;
+      border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* === 随机弹窗 === */
+    .random-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); z-index: 1500; justify-content: center; align-items: center;
+      backdrop-filter: blur(6px);
+    }
+    .random-modal.active { display: flex; }
+    .random-card {
+      background: var(--bg-card); border: 1px solid var(--neon-purple);
+      border-radius: 16px; padding: 32px; max-width: 500px; width: 90%;
+      text-align: center; animation: cardIn 0.4s ease;
+      box-shadow: 0 0 40px rgba(180,41,249,0.3);
+    }
+    .random-card .fortune-title {
+      font-size: 1.4rem; color: var(--neon-purple); margin-bottom: 8px; font-weight: 700;
+    }
+    .random-card .fortune-emoji { font-size: 3rem; margin: 16px 0; }
+    .random-card .fortune-content {
+      font-size: 1.05rem; line-height: 1.7; color: var(--text-main);
+      margin: 16px 0; padding: 16px;
+      background: rgba(0,0,0,0.3); border-radius: 8px;
+      border-left: 3px solid var(--neon-purple);
+      text-align: left;
+    }
+    .random-card .fortune-author {
+      font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px;
+    }
+    .random-card .fortune-btns { display: flex; gap: 10px; justify-content: center; }
+    .random-card .fortune-btns button {
+      padding: 10px 20px; border-radius: 8px; border: none;
+      cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s;
+    }
+    .fortune-btn-again {
+      background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+      color: #fff;
+    }
+    .fortune-btn-again:hover { transform: translateY(-1px); }
+    .fortune-btn-close {
+      background: var(--bg-card-hover); color: var(--text-dim); border: 1px solid var(--border) !important;
+    }
+    .fortune-btn-close:hover { color: var(--text-main); }
+
     /* === 分页/加载更多 === */
     .load-more-btn {
       display: none; width: 100%; background: var(--bg-card);
@@ -660,8 +743,21 @@
        <button class="sort-btn" data-sort="hottest" onclick="setSortMode('hottest')" data-i18n="sort_hottest"></button>
     </div>
 
+    <!-- 搜索栏 + 随机按钮 -->
+    <div class="toolbar-row">
+      <div class="search-wrapper">
+        <input type="text" class="search-box" id="searchBox" oninput="onSearchInput()" data-i18n-placeholder="search_placeholder" maxlength="100">
+      </div>
+      <button class="random-btn" onclick="showRandomVent()" data-i18n="random_btn">🎲 今日虾运</button>
+    </div>
+
     <div class="posts-list" id="postsList"></div>
     <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()" data-i18n="load_more"></button>
+  </div>
+
+  <!-- 随机弹窗 -->
+  <div class="random-modal" id="randomModal" onclick="if(event.target===this)closeRandomModal()">
+    <div class="random-card" id="randomCard"></div>
   </div>
 
   <footer class="footer">
@@ -698,6 +794,14 @@
         sort_newest: '最新发表',
         sort_hottest: '最热虾图',
         load_more: '加载更多吐槽',
+        search_placeholder: '🔍 搜索吐槽内容...',
+        random_btn: '🎲 今日虾运',
+        random_title: '🎲 今日打工虾运势',
+        random_again: '🎲 再来一签',
+        random_close: '关闭',
+        copy_success: '已复制到剪贴板！',
+        pinned_label: '📌 精选',
+        copy_btn: '📋 复制',
         form_title: '🦞 发一条吐槽',
         form_nickname_label: '你的昵称（不填就是匿名打工虾）',
         form_nickname_placeholder: '匿名打工虾',
@@ -748,7 +852,15 @@
         stat_system: 'SYSTEM STRESS LEVEL (Global)',
         sort_newest: 'Latest Vents',
         sort_hottest: 'Hottest Shrimp',
-        load_more: 'Load More',
+        load_more: 'Load More Vents',
+        search_placeholder: '🔍 Search vents...',
+        random_btn: '🎲 Daily Fortune',
+        random_title: '🎲 Shrimp Fortune of the Day',
+        random_again: '🎲 Draw Again',
+        random_close: 'Close',
+        copy_success: 'Copied to clipboard!',
+        pinned_label: '📌 Featured',
+        copy_btn: '📋 Copy',
         form_title: '🦞 Post a vent',
         form_nickname_label: 'Your nickname (default: Anonymous Shrimp)',
         form_nickname_placeholder: 'Anonymous Shrimp',
@@ -800,6 +912,14 @@
         sort_newest: '新着投稿',
         sort_hottest: 'エビ熱榜',
         load_more: 'もっと読み込む',
+        search_placeholder: '🔍 愚痴を検索...',
+        random_btn: '🎲 今日の運勢',
+        random_title: '🎲 今日のエビ運勢',
+        random_again: '🎲 もう一回',
+        random_close: '閉じる',
+        copy_success: 'クリップボードにコピーしました！',
+        pinned_label: '📌 注目',
+        copy_btn: '📋 コピー',
         form_title: '🦞 愚痴を投稿',
         form_nickname_label: 'ニックネーム（任意、デフォルト：匿名エビ）',
         form_nickname_placeholder: '匿名エビ',
@@ -851,6 +971,14 @@
         sort_newest: '최신 불만',
         sort_hottest: '가장 뜨거운 속',
         load_more: '더 보기',
+        search_placeholder: '🔍 불만 검색...',
+        random_btn: '🎲 오늘의 운세',
+        random_title: '🎲 오늘의 새우 운세',
+        random_again: '🎲 다시 뵑기',
+        random_close: '닫기',
+        copy_success: '클립보드에 복사되었습니다!',
+        pinned_label: '📌 추천',
+        copy_btn: '📋 복사',
         form_title: '🦞 불만 올리기',
         form_nickname_label: '닉네임 (선택, 기본: 익명 새우)',
         form_nickname_placeholder: '익명 새우',
@@ -902,6 +1030,14 @@
         sort_newest: 'Más Reciente',
         sort_hottest: 'Más Caliente',
         load_more: 'Cargar Más',
+        search_placeholder: '🔍 Buscar quejas...',
+        random_btn: '🎲 Fortuna del día',
+        random_title: '🎲 Fortuna del Camarón',
+        random_again: '🎲 Otra vez',
+        random_close: 'Cerrar',
+        copy_success: '¡Copiado al portapapeles!',
+        pinned_label: '📌 Destacado',
+        copy_btn: '📋 Copiar',
         form_title: '🦞 Publica una queja',
         form_nickname_label: 'Tu apodo (por defecto: Camarón Anónimo)',
         form_nickname_placeholder: 'Camarón Anónimo',
@@ -953,6 +1089,14 @@
         sort_newest: 'Plus récent',
         sort_hottest: 'Plus populaire',
         load_more: 'Charger plus',
+        search_placeholder: '🔍 Rechercher des plaintes...',
+        random_btn: '🎲 Fortune du jour',
+        random_title: '🎲 Fortune de la Crevette',
+        random_again: '🎲 Encore',
+        random_close: 'Fermer',
+        copy_success: 'Copié dans le presse-papiers !',
+        pinned_label: '📌 Vedette',
+        copy_btn: '📋 Copier',
         form_title: '🦞 Publier une plainte',
         form_nickname_label: 'Votre pseudo (par défaut : Crevette Anonyme)',
         form_nickname_placeholder: 'Crevette Anonyme',
@@ -1117,6 +1261,61 @@
       }
     }
 
+    // ==================== 搜索过滤 ====================
+    let searchQuery = '';
+    function onSearchInput() {
+      searchQuery = document.getElementById('searchBox').value.trim().toLowerCase();
+      currentPage = 1;
+      processPosts();
+    }
+
+    // ==================== 置顶/精选判定 ====================
+    function isPinned(post) {
+      // 精选条件：点赞数 >= 5 或 评论数 >= 3
+      return post.likes >= 5 || (post.comments && post.comments.length >= 3);
+    }
+
+    // ==================== 随机抽签 ====================
+    function showRandomVent() {
+      if (allPosts.length === 0) return;
+      const randomPost = allPosts[Math.floor(Math.random() * allPosts.length)];
+      const card = document.getElementById('randomCard');
+      card.innerHTML = `
+        <div class="fortune-title">${t('random_title')}</div>
+        <div class="fortune-emoji">${escHtml(randomPost.mood)}</div>
+        <div class="fortune-content">${escHtml(randomPost.content)}</div>
+        <div class="fortune-author">— ${escHtml(randomPost.nickname || t('default_name'))}</div>
+        <div class="fortune-btns">
+          <button class="fortune-btn-again" onclick="showRandomVent()">${t('random_again')}</button>
+          <button class="fortune-btn-close" onclick="closeRandomModal()">${t('random_close')}</button>
+        </div>
+      `;
+      document.getElementById('randomModal').classList.add('active');
+    }
+    function closeRandomModal() {
+      document.getElementById('randomModal').classList.remove('active');
+    }
+
+    // ==================== 一键复制 ====================
+    async function copyVent(id, btn) {
+      const post = allPosts.find(p => p.id === id);
+      if (!post) return;
+      const text = `${post.mood} ${post.content}\n— ${post.nickname || t('default_name')}\n\n🦞 from 724claw.icu`;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.classList.add('copied');
+        btn.innerHTML = '✅ Copied!';
+        showToast(t('copy_success'));
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = t('copy_btn'); }, 2000);
+      } catch (e) {
+        // fallback
+        const ta = document.createElement('textarea'); ta.value = text;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(t('copy_success'));
+      }
+    }
+
     // ==================== 排序和分页逻辑 ====================
     function setSortMode(mode) {
       sortMode = mode;
@@ -1148,7 +1347,18 @@
         sortedPosts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       }
 
-      displayedPosts = sortedPosts;
+      // 搜索过滤
+      if (searchQuery) {
+        sortedPosts = sortedPosts.filter(p =>
+          (p.content && p.content.toLowerCase().includes(searchQuery)) ||
+          (p.nickname && p.nickname.toLowerCase().includes(searchQuery))
+        );
+      }
+
+      // 置顶精选排到前面
+      const pinned = sortedPosts.filter(isPinned);
+      const normal = sortedPosts.filter(p => !isPinned(p));
+      displayedPosts = [...pinned, ...normal];
       renderPosts();
     }
 
@@ -1190,6 +1400,7 @@
             </div>
             <div class="post-mood">${escHtml(p.mood)}</div>
           </div>
+          ${isPinned(p) ? `<div class="pinned-badge">${t('pinned_label')}</div>` : ''}
           <div class="post-content">${escHtml(p.content)}</div>
           <div class="post-actions">
             <button class="action-btn" onclick="likePost(${p.id}, this)">
@@ -1197,6 +1408,9 @@
             </button>
             <button class="action-btn" onclick="toggleComments(${p.id})">
               💬 <span>${p.comments ? p.comments.length : 0}</span>
+            </button>
+            <button class="copy-btn" onclick="copyVent(${p.id}, this)">
+              ${t('copy_btn')}
             </button>
           </div>
           <div class="comments-section" id="comments-${p.id}">
