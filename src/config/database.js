@@ -39,6 +39,12 @@ db.exec(`
 
   CREATE INDEX IF NOT EXISTS idx_comments_post_id ON comments(post_id);
   CREATE INDEX IF NOT EXISTS idx_posts_created_at ON posts(created_at);
+
+  CREATE TABLE IF NOT EXISTS app_stats (
+    key TEXT PRIMARY KEY,
+    value INTEGER DEFAULT 0
+  );
+  INSERT OR IGNORE INTO app_stats (key, value) VALUES ('visitors_count', 1000);
 `);
 
 // 自动迁移：如果 data.json 存在且 posts 表为空，则执行数据迁移

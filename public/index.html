@@ -603,6 +603,10 @@
   <!-- 可视化仪表盘 -->
   <div class="dashboard-panel container">
     <div class="dash-box">
+      <div class="stat-label" data-i18n="stat_visitors"></div>
+      <div class="stat-num highlight" id="statVisitors">...</div>
+    </div>
+    <div class="dash-box">
       <div class="stat-label" data-i18n="stat_posts"></div>
       <div class="stat-num" id="statPosts">0</div>
     </div>
@@ -683,6 +687,7 @@
         stat_posts: '条吐槽',
         stat_likes: '次共鸣',
         stat_comments: '条评论',
+        stat_visitors: '只小龙虾访问',
         stat_system: '全网系统压力水平 (实时)',
         sort_newest: '最新发表',
         sort_hottest: '最热虾图',
@@ -733,6 +738,7 @@
         stat_posts: 'vents',
         stat_likes: 'resonates',
         stat_comments: 'comments',
+        stat_visitors: 'lobsters visited',
         stat_system: 'SYSTEM STRESS LEVEL (Global)',
         sort_newest: 'Latest Vents',
         sort_hottest: 'Hottest Shrimp',
@@ -783,6 +789,7 @@
         stat_posts: '件の愚痴',
         stat_likes: '件の共感',
         stat_comments: '件のコメント',
+        stat_visitors: '匹のエビが訪問',
         stat_system: 'システムストレスレベル (リアルタイム)',
         sort_newest: '新着投稿',
         sort_hottest: 'エビ熱榜',
@@ -833,6 +840,7 @@
         stat_posts: '개 불만',
         stat_likes: '번 공감',
         stat_comments: '개 댓글',
+        stat_visitors: '마리의 새우 방문',
         stat_system: '전체 시스템 스트레스 수준 (실시간)',
         sort_newest: '최신 불만',
         sort_hottest: '가장 뜨거운 속',
@@ -883,6 +891,7 @@
         stat_posts: 'quejas',
         stat_likes: 'resonancias',
         stat_comments: 'comentarios',
+        stat_visitors: 'langostas visitaron',
         stat_system: 'NIVEL DE ESTRÉS DEL SISTEMA (Global)',
         sort_newest: 'Más Reciente',
         sort_hottest: 'Más Caliente',
@@ -933,6 +942,7 @@
         stat_posts: 'plaintes',
         stat_likes: 'résonances',
         stat_comments: 'commentaires',
+        stat_visitors: 'homards ont visité',
         stat_system: 'NIVEAU DE STRESS DU SYSTÈME (Global)',
         sort_newest: 'Plus récent',
         sort_hottest: 'Plus populaire',
@@ -1276,9 +1286,21 @@
     }
 
     // ==================== 启动 ====================
+    async function recordVisitor() {
+      try {
+        const res = await fetch('/api/stats/visitors', { method: 'POST' });
+        const data = await res.json();
+        const dNum = document.getElementById('statVisitors');
+        if (dNum) dNum.textContent = data.count;
+      } catch (e) {
+        console.error('Failed to record visitor', e);
+      }
+    }
+
     startTimer();
     applyLang();
     loadPosts();
+    recordVisitor();
   </script>
 </body>
 </html>

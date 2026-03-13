@@ -5,6 +5,7 @@ const compression = require('compression');
 const cors = require('cors');
 
 const postRoutes = require('./routes/posts');
+const statsController = require('./controllers/statsController');
 const errorHandler = require('./middleware/errorHandler');
 const createRateLimiter = require('./middleware/rateLimiter');
 
@@ -40,6 +41,10 @@ app.get('/api/posts', require('./controllers/postController').getPosts);
 app.post('/api/posts', postLimiter, require('./controllers/postController').createPost);
 app.post('/api/posts/:id/like', postLimiter, require('./controllers/postController').likePost);
 app.post('/api/posts/:id/comments', postLimiter, require('./controllers/postController').addComment);
+
+// ==================== 访客统计 ====================
+// 访客统计不限制严格速率，避免被误杀，或者可单独配置宽松限流
+app.post('/api/stats/visitors', statsController.incrementVisitors);
 
 // ==================== GitHub Webhook ====================
 app.post('/webhook/deploy', require('./webhook'));
